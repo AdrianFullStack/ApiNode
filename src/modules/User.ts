@@ -1,8 +1,6 @@
-import * as mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-const Schema = mongoose.Schema;
-
-export const User = new Schema({
+const userModel = new Schema({
     first_name: {
         type: String,
         required: 'Ingrese sus nombres'
@@ -30,3 +28,5 @@ export const User = new Schema({
         default: Date.now
     }
 })
+
+export default model('User', userModel)

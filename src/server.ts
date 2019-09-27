@@ -3,16 +3,19 @@ import morgan from "morgan";
 import helmet from "helmet";
 import compression from "compression";
 import cors from "cors";
+import { MongoClient } from "mongodb";
 
-import indexRoutes from "./routes/indexRoutes"
+import IndexRoutes from "./routes/IndexRoutes"
 
 class Server {
-    public app: Application;
+    public app: Application
+    private indexRoutes: IndexRoutes
 
     constructor() {
         this.app = express()
+        this.indexRoutes = new IndexRoutes()
         this.config()
-        this.routes();
+        this.routes()
     }
 
     config() {
@@ -26,11 +29,18 @@ class Server {
     }
 
     routes() {
-        this.app.use(indexRoutes);
+        this.app.use(this.indexRoutes.router)
     }
 
     start() {
-        this.app.listen(this.app.get('port'), () => console.log('Start Server'))
+        MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+            if (err) throw err;
+            console.log('Conexion establecida')
+
+            const db = client.db('demo')
+
+            this.app.listen(this.app.get('port'), () => console.log('Start Server'))
+        })
     }
 }
 

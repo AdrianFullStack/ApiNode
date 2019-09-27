@@ -1,18 +1,23 @@
 import { Request, Response } from "express";
+import UserRepository from "../repositories/UserRepository";
+import IUser from "../contracts/IUser";
 
 export class UserController {
-    constructor() {
+    private iuser: IUser
 
+    constructor(iuser: IUser) {
+        this.iuser = iuser;
     }
 
     // Method GET
     public index(req: Request, res: Response) {
-        
+        const data = this.iuser.find()
+        return res.json(data)
     }
 
     // Method POST
     public store(req: Request, res: Response) {
-        
+        return res.json('')
     }
 
     // Method GET
